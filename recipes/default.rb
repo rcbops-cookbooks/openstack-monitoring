@@ -16,3 +16,15 @@
 # limitations under the License.
 include_recipe "monitoring"
 include_recipe "openstack-monitoring::keystone"
+include_recipe "openstack-monitoring::libvirt"
+include_recipe "openstack-monitoring::nova-api-ec2.rb"
+include_recipe "openstack-monitoring::nova-api-metadata"
+include_recipe "openstack-monitoring::nova-api-os-compute"
+include_recipe "openstack-monitoring::nova-api-os-volume"
+include_recipe "openstack-monitoring::nova-cert"
+include_recipe "openstack-monitoring::nova-compute"
+include_recipe "openstack-monitoring::nova-conductor"
+include_recipe "openstack-monitoring::nova-scheduler"
+include_recipe "openstack-monitoring::nova-setup"
+include_recipe "openstack-monitoring::nova-vncproxy"
+
