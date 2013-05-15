@@ -15,9 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe "monitoring"
+include_recipe "osops-utils"
 
 if node.recipe?("nova::nova-setup") or node[:recipes].include?("nova::nova-setup")
-	ks_service_endpoint = get_access_endpoint(ks_api_role, ks_ns, "service-api")
+	ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
 	keystone = get_settings_by_role("keystone-setup", "keystone")
 	keystone_admin_user = keystone["admin_user"]
 	keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
