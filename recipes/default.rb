@@ -17,7 +17,7 @@
 include_recipe "monitoring"
 include_recipe "openstack-monitoring::keystone"
 include_recipe "openstack-monitoring::libvirt"
-include_recipe "openstack-monitoring::nova-api-ec2.rb"
+include_recipe "openstack-monitoring::nova-api-ec2"
 include_recipe "openstack-monitoring::nova-api-metadata"
 include_recipe "openstack-monitoring::nova-api-os-compute"
 include_recipe "openstack-monitoring::nova-api-os-volume"
