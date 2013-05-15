@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: default
+# Recipe:: nova-conductor
 #
 # Copyright 2012, Rackspace US, Inc.
 #
@@ -15,3 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe "monitoring"
+
+if node.recipe?("nova::nova-conductor") or node[:recipes].include?("nova::nova-conductor")
+	platform_options=node["nova"]["platform"]
+	monitoring_procmon "nova-conductor" do
+            service_name=platform_options["nova_conductor_service"]
+            process_name "nova-conductor"
+            script_name service_name
+	end
+
+	monitoring_metric "nova-conductor-proc" do
+            type "proc"
+            proc_name "nova-conductor"
+            proc_regex platform_options["nova_conductor_service"]
+
+            alarms(:failure_min => 2.0)
+	end
+end

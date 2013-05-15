@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: default
+# Recipe:: nova-compute
 #
 # Copyright 2012, Rackspace US, Inc.
 #
