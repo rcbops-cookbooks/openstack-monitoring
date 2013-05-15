@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: default
+# Recipe:: nova-api-ec2
 #
 # Copyright 2012, Rackspace US, Inc.
 #

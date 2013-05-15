@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: default
+# Recipe:: nova-api-os-volume
 #
 # Copyright 2012, Rackspace US, Inc.
 #
@@ -15,3 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe "monitoring"
+
+if node.recipe?("nova::api-os-volume") or node[:recipes].include?("nova::api-os-volume")
+	platform_options = node["nova"]["platform"]
+	monitoring_procmon "nova-api-os-volume" do
+            service_name=platform_options["api_os_volume_service"]
+            process_name "nova-api-os-volume"
+            script_name service_name
+	end
+
+	monitoring_metric "nova-api-os-volume-proc" do
+            type "proc"
+            proc_name "nova-api-os-volume"
+            proc_regex platform_options["api_os_volume_service"]
+
+            alarms(:failure_min => 2.0)
+	end
+end
