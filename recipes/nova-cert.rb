@@ -15,3 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe "monitoring"
+
+if node.recipe?("nova::nova-cert") or node[:recipes].include?("nova::nova-cert")
+	platform_options=node["nova"]["platform"]
+	monitoring_procmon "nova-cert" do
+            service_name = platform_options["nova_cert_service"]
+            process_name "nova-cert"
+            script_name service_name
+	end
+end
