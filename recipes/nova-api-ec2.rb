@@ -17,6 +17,7 @@
 include_recipe "monitoring"
 
 if node.recipe?("nova::api-ec2") or node[:recipes].include?("nova::api-ec2")
+	platform_options = node["nova"]["platform"]
 	monitoring_procmon "nova-api-ec2" do
             service_name = platform_options["api_ec2_service"]
             pname = platform_options["api_ec2_process_name"]
