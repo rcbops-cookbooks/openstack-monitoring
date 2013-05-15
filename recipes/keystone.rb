@@ -17,8 +17,7 @@
 include_recipe "monitoring"
 
 # Keystone monitoring setup..
-if node.role?("keystone-setup") or node[:roles].include?("keystone-setup")
-# if node.recipe?("keystone::keystone-api") or node[:recipes].include?("keystone::keystone-api")
+if node.recipe?("keystone::keystone-api") or node[:recipes].include?("keystone::keystone-api")
 	platform_options = node["keystone"]["platform"]
 	ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
 	monitoring_procmon "keystone" do
