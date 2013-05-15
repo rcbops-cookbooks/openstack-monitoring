@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: default
+# Recipe:: vncproxy
 #
 # Copyright 2012, Rackspace US, Inc.
 #
@@ -15,3 +15,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe "monitoring"
+
+if node.recipe?("nova::vncproxy") or node[:recipes].include?("nova::vncproxy")
+	platform_options = node["nova"]["platform"]
+	monitoring_procmon platform_options["nova_vncproxy_service"] do
+            service_name=platform_options["nova_vncproxy_service"]
+            process_name "nova-novncproxy"
+            script_name service_name
+	end
+
+	monitoring_metric "nova-novncproxy-proc" do
+            type "proc"
+            proc_name "nova-novncproxy"
+            proc_regex platform_options["nova_vncproxy_service"]
+
+            alarms(:failure_min => 2.0)
+	end
+
+	monitoring_procmon "nova-consoleauth" do
+            service_name=platform_options["nova_vncproxy_consoleauth_service"]
+            pname=platform_options["nova_vncproxy_consoleauth_process_name"]
+            process_name pname
+            script_name service_name
+	end
+
+	monitoring_metric "nova-consoleauth-proc" do
+            type "proc"
+            proc_name "nova-consoleauth"
+            proc_regex platform_options["nova_vncproxy_consoleauth_service"]
+
+            alarms(:failure_min => 1.0)
+	end
+end
