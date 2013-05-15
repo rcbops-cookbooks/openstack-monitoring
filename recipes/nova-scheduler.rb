@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: default
+# Recipe:: nova-scheduler
 #
 # Copyright 2012, Rackspace US, Inc.
 #
@@ -15,3 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe "monitoring"
+
+if node.recipe?("nova::scheduler") or node[:recipes].include?("nova::scheduler")
+	platform_options = node["nova"]["platform"]
+	monitoring_procmon "nova-scheduler" do
+            service_name=platform_options["nova_scheduler_service"]
+            process_name "nova-scheduler"
+            script_name service_name
+	end
+
+	monitoring_metric "nova-scheduler-proc" do
+            type "proc"
+            proc_name "nova-scheduler"
+            proc_regex platform_options["nova_scheduler_service"]
+
+            alarms(:failure_min => 2.0)
+	end
+end
