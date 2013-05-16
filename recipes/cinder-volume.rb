@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?(keystone::keystone-api) or node[:recipes].include?(keystone::keystone-api)
+if node.recipe?("cinder::cinder-volume") or node[:recipes].include?("cinder::cinder-volume")
     platform_options = node[cinder][platform]
     monitoring_procmon "cinder-volume" do
         service_name=platform_options["cinder_volume_service"]
