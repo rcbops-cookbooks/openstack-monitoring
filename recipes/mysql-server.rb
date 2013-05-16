@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-# Keystone monitoring setup..
+# monitoring setup..
 if node.recipe?("mysql-openstack::server") or node[:recipes].include?("mysql-openstack::server")
 	platform_options = node["mysql"]["platform"]
 	monitoring_procmon "mysqld" do
