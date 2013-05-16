@@ -1,7 +1,7 @@
 # Cookbook Name:: openstack-monitoring
 # Recipe:: default
 #
-# Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ include_recipe "openstack-monitoring::mysql-server"
 include_recipe "openstack-monitoring::rabbitmq-server"
 include_recipe "openstack-monitoring::keystone"
 include_recipe "openstack-monitoring::libvirt"
+include_recipe "openstack-monitoring::glance-api"
+include_recipe "openstack-monitoring::glance-registry"
 include_recipe "openstack-monitoring::nova-api-ec2"
 include_recipe "openstack-monitoring::nova-api-metadata"
 include_recipe "openstack-monitoring::nova-api-os-compute"
@@ -26,6 +28,7 @@ include_recipe "openstack-monitoring::nova-api-os-volume"
 include_recipe "openstack-monitoring::nova-cert"
 include_recipe "openstack-monitoring::nova-compute"
 include_recipe "openstack-monitoring::nova-conductor"
+include_recipe "openstack-monitoring::nova-network"
 include_recipe "openstack-monitoring::nova-scheduler"
 include_recipe "openstack-monitoring::nova-setup"
 include_recipe "openstack-monitoring::nova-vncproxy"
