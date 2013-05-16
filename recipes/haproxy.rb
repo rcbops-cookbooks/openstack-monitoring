@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-# Keystone monitoring setup..
+# haproxy monitoring setup..
 if node.recipe?("haproxy::default") or node[:recipes].include?("haproxy::default")
     platform_options = node["haproxy"]["platform"]
     monitoring_procmon "haproxy" do
