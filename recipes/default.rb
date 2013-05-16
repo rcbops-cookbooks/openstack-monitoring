@@ -16,6 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 include_recipe "openstack-monitoring::mysql-server"
+include_recipe "openstack-monitoring::rabbitmq-server"
 include_recipe "openstack-monitoring::keystone"
 include_recipe "openstack-monitoring::libvirt"
 include_recipe "openstack-monitoring::nova-api-ec2"
