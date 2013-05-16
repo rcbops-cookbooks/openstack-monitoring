@@ -1,7 +1,7 @@
 # Cookbook Name:: openstack-monitoring
 # Recipe:: cinder-scheduler
 #
-# Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 include_recipe "monitoring"
 
 if node.recipe?("cinder::cinder-scheduler") or node[:recipes].include?("cinder::cinder-scheduler")
-    platform_options = node[cinder][platform]
+    platform_options = node["cinder"]["platform"]
     monitoring_procmon "cinder-scheduler" do
         service_name=platform_options["cinder_scheduler_service"]
         process_name "cinder-scheduler"
