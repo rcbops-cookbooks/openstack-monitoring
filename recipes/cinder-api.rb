@@ -17,7 +17,7 @@
 include_recipe "monitoring"
 
 if node.recipe?("cinder::cinder-api") or node[:recipes].include?("cinder::cinder-api")
-    platform_options = node[cinder][platform]
+    platform_options = node["cinder"]["platform"]
     monitoring_procmon "cinder-api" do
         service_name=platform_options["cinder_api_service"]
         process_name "cinder-api"
