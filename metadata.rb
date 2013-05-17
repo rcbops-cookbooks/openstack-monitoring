@@ -6,6 +6,6 @@ description      'Installs/Configures openstack-monitoring'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
 
-%w{ keystone }.each do |dep|
+%w{ keystone monitoring }.each do |dep|
 	depends dep
 end
