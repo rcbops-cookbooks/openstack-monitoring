@@ -16,12 +16,8 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-<<<<<<< HEAD
 if node.recipe?("swift::proxy-server")
-=======
-if node.recipe?("swift::proxy-server") or node[:recipes].include?("swift::proxy-server")
 	platform_options = node["swift"]["platform"]
->>>>>>> f32ae06dfc6ba993182d0d6ebd95ecc8a851509b
 	swift_proxy_service = platform_options["service_prefix"] + "swift-proxy" + platform_options["service_suffix"]
 	monitoring_procmon "swift-proxy" do
             process_name "python.*swift-proxy.*"
