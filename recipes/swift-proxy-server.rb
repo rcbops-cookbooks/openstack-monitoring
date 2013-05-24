@@ -1,7 +1,7 @@
 # Cookbook Name:: openstack-monitoring
 # Recipe:: swift-proxy-server
 #
-# Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 # limitations under the License.
 include_recipe "monitoring"
 
+<<<<<<< HEAD
 if node.recipe?("swift::proxy-server")
+=======
+if node.recipe?("swift::proxy-server") or node[:recipes].include?("swift::proxy-server")
+	platform_options = node["swift"]["platform"]
+>>>>>>> f32ae06dfc6ba993182d0d6ebd95ecc8a851509b
 	swift_proxy_service = platform_options["service_prefix"] + "swift-proxy" + platform_options["service_suffix"]
 	monitoring_procmon "swift-proxy" do
             process_name "python.*swift-proxy.*"

@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: nova-cert
+# Recipe:: glance-registry
 #
 # Copyright 2013, Rackspace US, Inc.
 #
@@ -16,11 +16,20 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::nova-cert")
-	platform_options=node["nova"]["platform"]
-	monitoring_procmon "nova-cert" do
-            service_name = platform_options["nova_cert_service"]
-            process_name "nova-cert"
-            script_name service_name
+# Glance monitoring setup..
+if node.recipe?("glance::glance-registry") or node[:recipes].include?("glance::glance-registry")
+	platform_options = node["glance"]["platform"]
+	monitoring_procmon "glance-registry" do
+            sname = platform_options["glance_registry_service"]
+            pname = platform_options["glance_registry_process_name"]
+            process_name pname
+            script_name sname
+	end
+
+	monitoring_metric "glance-registry-proc" do
+            type "proc"
+            proc_name "glance-registry"
+            proc_regex platform_options["glance_registry_service"]
+            alarms(:failure_min => 2.0)
 	end
 end
