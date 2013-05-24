@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("swift::management-server") or node[:recipes].include?("swift::management-server")
+if node.recipe?("swift::management-server")
     monitoring_metric "swift-cluster-stats" do
         type "pyscript"
         script "cluster_stats.py"

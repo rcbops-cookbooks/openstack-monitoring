@@ -17,7 +17,7 @@
 include_recipe "monitoring"
 
 # Keystone monitoring setup..
-if node.recipe?("haproxy::default") or node[:recipes].include?("haproxy::default")
+if node.recipe?("haproxy::default")
     platform_options = node["haproxy"]["platform"]
     monitoring_procmon "haproxy" do
         sname = platform_options["haproxy_service"]

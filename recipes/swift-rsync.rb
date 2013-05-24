@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("swift::rsync") or node[:recipes].include?("swift::rsync")
+if node.recipe?("swift::rsync")
     platform_options = node["swift"]["platform"]
     monitoring_metric "rysnc" do
         type "proc"

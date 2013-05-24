@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::api-os-volume") or node[:recipes].include?("nova::api-os-volume")
+if node.recipe?("nova::api-os-volume")
 	platform_options = node["nova"]["platform"]
 	monitoring_procmon "nova-api-os-volume" do
             service_name=platform_options["api_os_volume_service"]

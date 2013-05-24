@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::compute") or node[:recipes].include?("nova::compute")
+if node.recipe?("nova::compute")
     platform_options = node["nova"]["platform"]
     monitoring_procmon "nova-compute" do
         service_name=platform_options["nova_compute_service"]

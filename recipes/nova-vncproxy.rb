@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::vncproxy") or node[:recipes].include?("nova::vncproxy")
+if node.recipe?("nova::vncproxy")
 	platform_options = node["nova"]["platform"]
 	monitoring_procmon platform_options["nova_vncproxy_service"] do
             service_name=platform_options["nova_vncproxy_service"]

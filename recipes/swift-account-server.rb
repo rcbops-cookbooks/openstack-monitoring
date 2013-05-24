@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("swift::account-server") or node[:recipes].include?("swift::account-server")
+if node.recipe?("swift::account-server")
     %w{swift-account swift-account-auditor swift-account-reaper swift-account-replicator}.each do |svc|
 	platform_options = node["swift"]["platform"]
 	service_name = platform_options["service_prefix"] + svc + platform_options["service_suffix"]

@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::libvirt") or node[:recipes].include?("nova::libvirt")
+if node.recipe?("nova::libvirt")
     platform_options = node["nova"]["platform"]
     monitoring_procmon "libvirt-bin" do
         service_name=platform_options["libvirt_service"]
