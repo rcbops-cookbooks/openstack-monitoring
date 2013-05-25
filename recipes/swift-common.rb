@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("swift::common") or node[:recipes].include?("swift::common")
+if node.recipe?("swift::common")
     platform_options = node["swift"]["platform"]
     monitoring_metric "swift-common-stats" do
         type "pyscript"

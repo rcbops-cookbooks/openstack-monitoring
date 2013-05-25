@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::scheduler") or node[:recipes].include?("nova::scheduler")
+if node.recipe?("nova::scheduler")
 	platform_options = node["nova"]["platform"]
 	monitoring_procmon "nova-scheduler" do
             service_name=platform_options["nova_scheduler_service"]

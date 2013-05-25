@@ -18,7 +18,7 @@ include_recipe "monitoring"
 include_recipe "osops-utils"
 
 # monitoring setup..
-if node.recipe?("mysql-openstack::server") or node[:recipes].include?("mysql-openstack::server")
+if node.recipe?("mysql-openstack::server")
 	platform_options = node["mysql"]["platform"]
 	mysql_info = get_bind_endpoint("mysql", "db")
 	monitoring_procmon "mysqld" do

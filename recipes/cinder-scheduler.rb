@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("cinder::cinder-scheduler") or node[:recipes].include?("cinder::cinder-scheduler")
+if node.recipe?("cinder::cinder-scheduler")
     platform_options = node["cinder"]["platform"]
     monitoring_procmon "cinder-scheduler" do
         service_name=platform_options["cinder_scheduler_service"]

@@ -17,8 +17,7 @@
 include_recipe "monitoring"
 
 # nova-network monitoring setup..
-if node.recipe?("nova-network::nova-controller") or node[:recipes].include?("nova-network::nova-controller") or
-   node.recipe?("nova-network::nova-compute") or node[:recipes].include?("nova-network::nova-compute")
+if node.recipe?("nova-network::nova-controller") or node.recipe?("nova-network::nova-compute")
 	platform_options = node["nova-network"]["platform"]
 	monitoring_procmon "nova-network" do
             service_name=platform_options["nova_network_service"]

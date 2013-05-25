@@ -16,7 +16,7 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::api-metadata") or node[:recipes].include?("nova::api-metadata")
+if node.recipe?("nova::api-metadata")
 	platform_options = node["nova"]["platform"]
 	monitoring_procmon "nova-api-metadata" do
             service_name = platform_options["nova_api_metadata_service"]

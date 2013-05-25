@@ -17,7 +17,7 @@
 include_recipe "monitoring"
 
 # monitoring setup..
-if node.recipe?("rabbitmq-openstack::server") or node[:recipes].include?("rabbitmq-openstack::server")
+if node.recipe?("rabbitmq-openstack::server")
 	platform_options = node["rabbitmq"]["platform"]
 	monitoring_procmon "rabbitmq-server" do
             pid_file "/var/run/rabbitmq/pid"
