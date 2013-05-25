@@ -17,7 +17,7 @@
 include_recipe "monitoring"
 
 # Glance monitoring setup..
-if node.recipe?("glance::glance-api") or node[:recipes].include?("glance::glance-api")
+if node.recipe?("glance::glance-api")
 	platform_options = node["glance"]["platform"]
 	monitoring_procmon "glance-api" do
             sname = platform_options["glance_api_service"]

@@ -16,8 +16,8 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-# haproxy monitoring setup..
-if node.recipe?("haproxy::default") or node[:recipes].include?("haproxy::default")
+# Keystone monitoring setup..
+if node.recipe?("haproxy::default")
     platform_options = node["haproxy"]["platform"]
     monitoring_procmon "haproxy" do
         sname = platform_options["haproxy_service"]

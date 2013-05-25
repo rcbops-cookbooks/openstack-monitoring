@@ -16,17 +16,16 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("swift::management-server") or node[:recipes].include?("swift::management-server")
-    monitoring_metric "swift-cluster-stats" do
-        type "pyscript"
-        script "cluster_stats.py"
-        alarms("Plugin_md5sums" => {
+monitoring_metric "swift-cluster-stats" do
+    type "pyscript"
+    script "cluster_stats.py"
+    alarms("Plugin_md5sums" => {
+        "Type_gauge" => {
+            :data_source => "value",
+            :failure_max => 0.0}},
+        "Plugin_replication_times.longest" => {
             "Type_gauge" => {
                 :data_source => "value",
-                :failure_max => 0.0}},
-            "Plugin_replication_times.longest" => {
-                "Type_gauge" => {
-                    :data_source => "value",
-                    :failure_max => 3600}})
-	end
+                :failure_max => 3600}})
+    only_if { node.recipe?("swift::management-server") }
 end
