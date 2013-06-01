@@ -17,32 +17,33 @@
 include_recipe "monitoring"
 
 # Glance monitoring setup..
-if node.recipe?("glance::glance-api")
-	platform_options = node["glance"]["platform"]
-	monitoring_procmon "glance-api" do
-            sname = platform_options["glance_api_service"]
-            pname = platform_options["glance_api_process_name"]
-            process_name pname
-            script_name sname
-	end
+if node.recipe?("glance::api")
+  platform_options = node["glance"]["platform"]
+  ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
+  monitoring_procmon "glance-api" do
+    sname = platform_options["glance_api_service"]
+    pname = platform_options["glance_api_process_name"]
+    process_name pname
+    script_name sname
+  end
 
-	monitoring_metric "glance-api-proc" do
-            type "proc"
-            proc_name "glance-api"
-            proc_regex platform_options["glance_api_service"]
+  monitoring_metric "glance-api-proc" do
+    type "proc"
+    proc_name "glance-api"
+    proc_regex platform_options["glance_api_service"]
 
-            alarms(:failure_min => 2.0)
-	end
+    alarms(:failure_min => 2.0)
+  end
 
-	# set up glance api monitoring (bytes/objects per tentant, etc)
-	monitoring_metric "glance-api" do
-	    type "pyscript"
-	    script "glance_plugin.py"
-	    options(
-	        "Username" => node["glance"]["service_user"],
-	        "Password" => node["glance"]["service_pass"],
-	        "TenantName" => node["glance"]["service_tenant_name"],
-	        "AuthURL" => ks_service_endpoint["uri"]
-	    )
-	end
+  # set up glance api monitoring (bytes/objects per tentant, etc)
+  monitoring_metric "glance-api" do
+    type "pyscript"
+    script "glance_plugin.py"
+    options(
+            "Username" => node["glance"]["service_user"],
+            "Password" => node["glance"]["service_pass"],
+            "TenantName" => node["glance"]["service_tenant_name"],
+            "AuthURL" => ks_service_endpoint["uri"]
+            )
+  end
 end
