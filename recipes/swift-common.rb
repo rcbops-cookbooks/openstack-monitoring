@@ -21,11 +21,13 @@ if node.recipe?("swift::common")
   monitoring_metric "swift-common-stats" do
     type "pyscript"
     script "swift_stats.py"
-    alarms("Plugin_unmounts" => {
-             "Type_gauge" => {
-               :data_source => "value",
-               :failure_max => 0.0
-             }
-           })
+    alarms(
+      "Plugin_unmounts" => {
+        "Type_gauge" => {
+          :data_source => "value",
+          :failure_max => 0.0
+        }
+      }
+    )
   end
 end

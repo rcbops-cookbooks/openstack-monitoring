@@ -32,7 +32,6 @@ if node.recipe?("mysql-openstack::server")
     type "proc"
     proc_name "mysqld"
     proc_regex platform_options["mysql_service"]
-  
     alarms(:failure_min => 1.0)
   end
 
@@ -43,9 +42,11 @@ if node.recipe?("mysql-openstack::server")
     password node["mysql"]["server_root_password"]
     port mysql_info["port"]
 
-    alarms("max_connections" => {
-            :warning_max => node["mysql"]["tunable"]["max_connections"].to_i * 0.8,
-            :failure_max => node["mysql"]["tunable"]["max_connections"].to_i * 0.9
-    })
+    alarms(
+      "max_connections" => {
+        :warning_max => node["mysql"]["tunable"]["max_connections"].to_i * 0.8,
+        :failure_max => node["mysql"]["tunable"]["max_connections"].to_i * 0.9
+      }
+    )
   end
 end

@@ -31,4 +31,3 @@ if node.recipe?("cinder::cinder-volume")
     alarms(:failure_min => 2.0)
   end
 end
-

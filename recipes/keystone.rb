@@ -35,13 +35,14 @@ if node.recipe?("keystone::keystone-api")
   end
 
   monitoring_metric "keystone" do
-  keystone_admin_user = node["keystone"]["admin_user"]
+    keystone_admin_user = node["keystone"]["admin_user"]
     type "pyscript"
     script "keystone_plugin.py"
     options(
       "Username" => keystone_admin_user,
       "Password" => node["keystone"]["users"][keystone_admin_user]["password"],
       "TenantName" => node["keystone"]["users"][keystone_admin_user]["default_tenant"],
-      "AuthURL" => ks_service_endpoint["uri"])
+      "AuthURL" => ks_service_endpoint["uri"]
+    )
   end
 end
