@@ -31,7 +31,6 @@ if node.recipe?("glance::api")
     type "proc"
     proc_name "glance-api"
     proc_regex platform_options["glance_api_service"]
-
     alarms(:failure_min => 2.0)
   end
 
@@ -40,10 +39,10 @@ if node.recipe?("glance::api")
     type "pyscript"
     script "glance_plugin.py"
     options(
-            "Username" => node["glance"]["service_user"],
-            "Password" => node["glance"]["service_pass"],
-            "TenantName" => node["glance"]["service_tenant_name"],
-            "AuthURL" => ks_service_endpoint["uri"]
-            )
+      "Username" => node["glance"]["service_user"],
+      "Password" => node["glance"]["service_pass"],
+      "TenantName" => node["glance"]["service_tenant_name"],
+      "AuthURL" => ks_service_endpoint["uri"]
+    )
   end
 end

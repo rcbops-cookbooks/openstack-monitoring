@@ -18,19 +18,18 @@ include_recipe "monitoring"
 
 # Keystone monitoring setup..
 if node.recipe?("haproxy::default")
-    platform_options = node["haproxy"]["platform"]
-    monitoring_procmon "haproxy" do
-        sname = platform_options["haproxy_service"]
-        pname = platform_options["haproxy_process_name"]
-        process_name pname
-        script_name sname
-    end
+  platform_options = node["haproxy"]["platform"]
+  monitoring_procmon "haproxy" do
+    sname = platform_options["haproxy_service"]
+    pname = platform_options["haproxy_process_name"]
+    process_name pname
+    script_name sname
+  end
 
-    monitoring_metric "haproxy" do
-        type "proc"
-        proc_name "haproxy"
-        proc_regex platform_options["haproxy_service"]
-
-        alarms(:failure_min => 1.0)
-    end
+  monitoring_metric "haproxy" do
+    type "proc"
+    proc_name "haproxy"
+    proc_regex platform_options["haproxy_service"]
+    alarms(:failure_min => 1.0)
+  end
 end

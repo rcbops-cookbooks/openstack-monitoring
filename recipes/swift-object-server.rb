@@ -17,21 +17,20 @@
 include_recipe "monitoring"
 
 if node.recipe?("swift::object-server")
-    %w{swift-object swift-object-auditor swift-object-updater swift-object-replicator}.each do |svc|
-	platform_options = node["swift"]["platform"]
-	service_name = platform_options["service_prefix"] + svc + platform_options["service_suffix"]
-        monitoring_procmon svc do
-            process_name "python.*#{svc}"
-            script_name service_name
-            only_if "[ -e /etc/swift/object-server.conf ] && [ -e /etc/swift/object.ring.gz ]"
-        end
-
-        monitoring_metric "#{svc}-proc" do
-            type "proc"
-            proc_name svc
-            proc_regex "python.*#{svc}"
-
-            alarms(:failure_min => 1.0)
-        end
+  %w{swift-object swift-object-auditor swift-object-updater swift-object-replicator}.each do |svc|
+    platform_options = node["swift"]["platform"]
+    service_name = platform_options["service_prefix"] + svc + platform_options["service_suffix"]
+    monitoring_procmon svc do
+      process_name "python.*#{svc}"
+      script_name service_name
+      only_if "[ -e /etc/swift/object-server.conf ] && [ -e /etc/swift/object.ring.gz ]"
     end
+
+    monitoring_metric "#{svc}-proc" do
+      type "proc"
+      proc_name svc
+      proc_regex "python.*#{svc}"
+      alarms(:failure_min => 1.0)
+    end
+  end
 end
