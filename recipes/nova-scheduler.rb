@@ -17,18 +17,17 @@
 include_recipe "monitoring"
 
 if node.recipe?("nova::scheduler")
-	platform_options = node["nova"]["platform"]
-	monitoring_procmon "nova-scheduler" do
-            service_name=platform_options["nova_scheduler_service"]
-            process_name "nova-scheduler"
-            script_name service_name
-	end
+  platform_options = node["nova"]["platform"]
+  monitoring_procmon "nova-scheduler" do
+    service_name=platform_options["nova_scheduler_service"]
+    process_name "nova-scheduler"
+    script_name service_name
+  end
 
-	monitoring_metric "nova-scheduler-proc" do
-            type "proc"
-            proc_name "nova-scheduler"
-            proc_regex platform_options["nova_scheduler_service"]
-
-            alarms(:failure_min => 2.0)
-	end
+  monitoring_metric "nova-scheduler-proc" do
+    type "proc"
+    proc_name "nova-scheduler"
+    proc_regex platform_options["nova_scheduler_service"]
+    alarms(:failure_min => 2.0)
+  end
 end

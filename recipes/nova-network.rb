@@ -18,18 +18,17 @@ include_recipe "monitoring"
 
 # nova-network monitoring setup..
 if node.recipe?("nova-network::nova-controller") or node.recipe?("nova-network::nova-compute")
-	platform_options = node["nova-network"]["platform"]
-	monitoring_procmon "nova-network" do
-            service_name=platform_options["nova_network_service"]
-            process_name "nova-network"
-            script_name service_name
-	end
+  platform_options = node["nova-network"]["platform"]
+  monitoring_procmon "nova-network" do
+    service_name=platform_options["nova_network_service"]
+    process_name "nova-network"
+    script_name service_name
+  end
 
-	monitoring_metric "nova-network-proc" do
-            type "proc"
-            proc_name "nova-network"
-            proc_regex platform_options["nova_network_service"]
-
-            alarms(:failure_min => 2.0)
-	end
+  monitoring_metric "nova-network-proc" do
+    type "proc"
+    proc_name "nova-network"
+    proc_regex platform_options["nova_network_service"]
+    alarms(:failure_min => 2.0)
+  end
 end

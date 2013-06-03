@@ -18,18 +18,17 @@ include_recipe "monitoring"
 
 # monitoring setup..
 if node.recipe?("rabbitmq-openstack::server")
-	platform_options = node["rabbitmq"]["platform"]
-	monitoring_procmon "rabbitmq-server" do
-            pid_file "/var/run/rabbitmq/pid"
-            service_name=platform_options["rabbitmq_service"]
-            script_name service_name
-	end
+  platform_options = node["rabbitmq"]["platform"]
+  monitoring_procmon "rabbitmq-server" do
+    pid_file "/var/run/rabbitmq/pid"
+    service_name=platform_options["rabbitmq_service"]
+    script_name service_name
+  end
 
-	monitoring_metric "rabbitmq-server-proc" do
-            type "proc"
-            proc_name "rabbitmq-server"
-            proc_regex platform_options["rabbitmq_service_regex"]
-
-            alarms(:failure_min => 1.0)
-	end
+  monitoring_metric "rabbitmq-server-proc" do
+    type "proc"
+    proc_name "rabbitmq-server"
+    proc_regex platform_options["rabbitmq_service_regex"]
+    alarms(:failure_min => 1.0)
+  end
 end

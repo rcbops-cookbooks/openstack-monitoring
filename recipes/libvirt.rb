@@ -17,22 +17,21 @@
 include_recipe "monitoring"
 
 if node.recipe?("nova::libvirt")
-    platform_options = node["nova"]["platform"]
-    monitoring_procmon "libvirt-bin" do
-        service_name=platform_options["libvirt_service"]
-        process_name "libvirtd"
-        script_name service_name
-    end
+  platform_options = node["nova"]["platform"]
+  monitoring_procmon "libvirt-bin" do
+    service_name=platform_options["libvirt_service"]
+    process_name "libvirtd"
+    script_name service_name
+  end
 
-    monitoring_metric "libvirtd-proc" do
-        type "proc"
-        proc_name "libvirtd-consoleauth"
-        proc_regex platform_options["libvirt_service"]
+  monitoring_metric "libvirtd-proc" do
+    type "proc"
+    proc_name "libvirtd-consoleauth"
+    proc_regex platform_options["libvirt_service"]
+    alarms(:failure_min => 1.0)
+  end
 
-        alarms(:failure_min => 1.0)
-    end
-
-    monitoring_metric "libvirt" do
-        type "libvirt"
-    end
+  monitoring_metric "libvirt" do
+    type "libvirt"
+  end
 end

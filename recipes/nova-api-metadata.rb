@@ -17,18 +17,17 @@
 include_recipe "monitoring"
 
 if node.recipe?("nova::api-metadata")
-	platform_options = node["nova"]["platform"]
-	monitoring_procmon "nova-api-metadata" do
-            service_name = platform_options["nova_api_metadata_service"]
-            process_name "nova-api-metadata"
-            script_name service_name
-	end
+  platform_options = node["nova"]["platform"]
+  monitoring_procmon "nova-api-metadata" do
+    service_name = platform_options["nova_api_metadata_service"]
+    process_name "nova-api-metadata"
+    script_name service_name
+  end
 
-	monitoring_metric "nova-api-metadata-proc" do
-            type "proc"
-            proc_name "nova-api-metadata"
-            proc_regex platform_options["nova_api_metadata_service"]
-
-            alarms(:failure_min => 2.0)
-	end
+  monitoring_metric "nova-api-metadata-proc" do
+    type "proc"
+    proc_name "nova-api-metadata"
+    proc_regex platform_options["nova_api_metadata_service"]
+    alarms(:failure_min => 2.0)
+  end
 end

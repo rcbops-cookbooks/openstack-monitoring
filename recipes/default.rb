@@ -43,4 +43,3 @@ include_recipe "openstack-monitoring::swift-common"
 include_recipe "openstack-monitoring::swift-object-server"
 include_recipe "openstack-monitoring::swift-container-server"
 include_recipe "openstack-monitoring::swift-proxy-server"
-

@@ -18,18 +18,18 @@ include_recipe "monitoring"
 include_recipe "osops-utils"
 
 if node.recipe?("nova::nova-setup")
-	ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
-	keystone = get_settings_by_role("keystone-setup", "keystone")
-	keystone_admin_user = keystone["admin_user"]
-	keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
-	keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
-	monitoring_metric "nova-plugin" do
-            type "pyscript"
-            script "nova_plugin.py"
-            options(
-                "Username" => keystone_admin_user,
-                "Password" => keystone_admin_password,
-                "TenantName" => keystone_admin_tenant,
-                "AuthURL" => ks_service_endpoint["uri"])
-	end
+  ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
+  keystone = get_settings_by_role("keystone-setup", "keystone")
+  keystone_admin_user = keystone["admin_user"]
+  keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
+  keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
+  monitoring_metric "nova-plugin" do
+    type "pyscript"
+    script "nova_plugin.py"
+    options(
+      "Username" => keystone_admin_user,
+      "Password" => keystone_admin_password,
+      "TenantName" => keystone_admin_tenant,
+      "AuthURL" => ks_service_endpoint["uri"])
+  end
 end

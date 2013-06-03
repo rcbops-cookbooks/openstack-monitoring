@@ -17,11 +17,11 @@
 include_recipe "monitoring"
 
 if node.recipe?("swift::rsync")
-    platform_options = node["swift"]["platform"]
-    monitoring_metric "rysnc" do
-        type "proc"
-        proc_name "rsync"
-        proc_regex "rsync"
-        alarms(:failure_min => 0.0)
-    end
+  platform_options = node["swift"]["platform"]
+  monitoring_metric "rysnc" do
+    type "proc"
+    proc_name "rsync"
+    proc_regex "rsync"
+    alarms(:failure_min => 0.0)
+  end
 end
