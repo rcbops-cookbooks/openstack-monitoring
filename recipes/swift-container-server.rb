@@ -17,21 +17,20 @@
 include_recipe "monitoring"
 
 if node.recipe?("swift::container-server")
-    %w{swift-container swift-container-auditor swift-container-updater swift-container-replicator}.each do |svc|
-	platform_options = node["swift"]["platform"]
-	service_name = platform_options["service_prefix"] + svc + platform_options["service_suffix"]
-        monitoring_procmon svc do
-            process_name "python.*#{svc}"
-            script_name service_name
-            only_if "[ -e /etc/swift/container-server.conf ] && [ -e /etc/swift/container.ring.gz ]"
-        end
-
-        monitoring_metric "#{svc}-proc" do
-            type "proc"
-            proc_name svc
-            proc_regex "python.*#{svc}"
-
-            alarms(:failure_min => 1.0)
-        end
+  %w{swift-container swift-container-auditor swift-container-updater swift-container-replicator}.each do |svc|
+    platform_options = node["swift"]["platform"]
+    service_name = platform_options["service_prefix"] + svc + platform_options["service_suffix"]
+    monitoring_procmon svc do
+      process_name "python.*#{svc}"
+      script_name service_name
+      only_if "[ -e /etc/swift/container-server.conf ] && [ -e /etc/swift/container.ring.gz ]"
     end
+
+    monitoring_metric "#{svc}-proc" do
+      type "proc"
+      proc_name svc
+      proc_regex "python.*#{svc}"
+      alarms(:failure_min => 1.0)
+    end
+  end
 end

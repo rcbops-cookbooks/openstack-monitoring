@@ -17,17 +17,17 @@
 include_recipe "monitoring"
 
 if node.recipe?("cinder::cinder-api")
-    platform_options = node["cinder"]["platform"]
-    monitoring_procmon "cinder-api" do
-        service_name=platform_options["cinder_api_service"]
-        process_name "cinder-api"
-        script_name service_name
-    end
+  platform_options = node["cinder"]["platform"]
+  monitoring_procmon "cinder-api" do
+    service_name=platform_options["cinder_api_service"]
+    process_name "cinder-api"
+    script_name service_name
+  end
 
-    monitoring_metric "cinder-api-proc" do
-        type "proc"
-        proc_name "cinder-api"
-        proc_regex platform_options["cinder_api_service"]
-        alarms(:failure_min => 2.0)
-    end
+  monitoring_metric "cinder-api-proc" do
+    type "proc"
+    proc_name "cinder-api"
+    proc_regex platform_options["cinder_api_service"]
+    alarms(:failure_min => 2.0)
+  end
 end

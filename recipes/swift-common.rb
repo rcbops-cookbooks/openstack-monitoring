@@ -17,13 +17,15 @@
 include_recipe "monitoring"
 
 if node.recipe?("swift::common")
-    platform_options = node["swift"]["platform"]
-    monitoring_metric "swift-common-stats" do
-        type "pyscript"
-        script "swift_stats.py"
-        alarms("Plugin_unmounts" => {
-                "Type_gauge" => {
-                :data_source => "value",
-                :failure_max => 0.0 }})
-    end
+  platform_options = node["swift"]["platform"]
+  monitoring_metric "swift-common-stats" do
+    type "pyscript"
+    script "swift_stats.py"
+    alarms("Plugin_unmounts" => {
+             "Type_gauge" => {
+               :data_source => "value",
+               :failure_max => 0.0
+             }
+           })
+  end
 end
