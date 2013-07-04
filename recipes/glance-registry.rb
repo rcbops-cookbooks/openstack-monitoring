@@ -19,11 +19,14 @@ include_recipe "monitoring"
 # Glance monitoring setup..
 if node.recipe?("glance::registry")
   platform_options = node["glance"]["platform"]
-  monitoring_procmon "glance-registry" do
-    sname = platform_options["glance_registry_service"]
-    pname = platform_options["glance_registry_process_name"]
-    process_name pname
-    script_name sname
+  glance_registry_endpoint = get_bind_endpoint("glance", "registry")
+  unless glance_registry_endpoint["scheme"] == "https"
+    monitoring_procmon "glance-registry" do
+      sname = platform_options["glance_registry_service"]
+      pname = platform_options["glance_registry_process_name"]
+      process_name pname
+      script_name sname
+    end
   end
 
   monitoring_metric "glance-registry-proc" do
