@@ -20,11 +20,13 @@ include_recipe "monitoring"
 if node.recipe?("keystone::keystone-api")
   platform_options = node["keystone"]["platform"]
   ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
-  monitoring_procmon "keystone" do
-    procname=platform_options["keystone_service"]
-    sname=platform_options["keystone_process_name"]
-    process_name sname
-    script_name procname
+  unless ks_service_endpoint["scheme"] == "https"
+    monitoring_procmon "keystone" do
+      procname=platform_options["keystone_service"]
+      sname=platform_options["keystone_process_name"]
+      process_name sname
+      script_name procname
+    end
   end
 
   monitoring_metric "keystone-proc" do

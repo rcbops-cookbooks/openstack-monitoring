@@ -18,11 +18,14 @@ include_recipe "monitoring"
 
 if node.recipe?("nova::api-ec2")
   platform_options = node["nova"]["platform"]
-  monitoring_procmon "nova-api-ec2" do
-    service_name = platform_options["api_ec2_service"]
-    pname = platform_options["api_ec2_process_name"]
-    process_name pname
-    script_name service_name
+  nova_ec2_endpoint = get_bind_endpoint("nova", "ec2-public")
+  unless nova_ec2_endpoint == "https"
+    monitoring_procmon "nova-api-ec2" do
+      service_name = platform_options["api_ec2_service"]
+      pname = platform_options["api_ec2_process_name"]
+      process_name pname
+      script_name service_name
+    end
   end
 
   monitoring_metric "nova-api-ec2-proc" do
