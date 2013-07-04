@@ -20,11 +20,14 @@ include_recipe "monitoring"
 if node.recipe?("glance::api")
   platform_options = node["glance"]["platform"]
   ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
-  monitoring_procmon "glance-api" do
-    sname = platform_options["glance_api_service"]
-    pname = platform_options["glance_api_process_name"]
-    process_name pname
-    script_name sname
+  glance_api_endpoint = get_bind_endpoint("glance", "api")
+  unless glance_api_endpoint["scheme"] == "https"
+    monitoring_procmon "glance-api" do
+      sname = platform_options["glance_api_service"]
+      pname = platform_options["glance_api_process_name"]
+      process_name pname
+      script_name sname
+    end
   end
 
   monitoring_metric "glance-api-proc" do
