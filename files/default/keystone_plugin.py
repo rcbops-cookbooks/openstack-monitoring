@@ -39,7 +39,8 @@ def get_stats(user, passwd, tenant, url):
 
     tenant_list = keystone.tenants.list()
     for tenant in tenant_list:
-        data["openstack.keystone.tenants.tenants.%s.users.count" % tenant.name] = len(keystone.tenants.list_users(tenant.id))
+        tenant_key = "openstack.keystone.tenants.tenants.%s.users.count" % tenant.name.replace(' ', '')
+        data[tenant_key] = len(keystone.tenants.list_users(tenant.id))
 
     ##########
     # debug
