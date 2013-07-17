@@ -66,7 +66,8 @@ def get_stats(user, passwd, tenant, url):
         server_list = client.servers.list()
         data["%s.total.count" % (prefix)] += len(server_list)
 
-        data["%s.tenant.%s.count" % (prefix,tenant['name'])] = 0
+        tenant_name = tenant['name'].replace(' ', '')
+        data["%s.tenant.%s.count" % (prefix,tenant_name)] = 0
 
         for server in server_list:
             flavor = client.flavors.get(int(server.flavor["id"]))
