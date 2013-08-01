@@ -18,13 +18,14 @@ include_recipe "monitoring"
 
 if node.recipe?("nova::api-os-compute")
   platform_options = node["nova"]["platform"]
-  nova_osapi_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api")
+  nova_osapi_endpoint = get_bind_endpoint("nova", "api")
   unless nova_osapi_endpoint["scheme"] == "https"
     monitoring_procmon "nova-api-os-compute" do
       service_name=platform_options["api_os_compute_service"]
       pname=platform_options["api_os_compute_process_name"]
       process_name pname
       script_name service_name
+      http_check({ :host => nova_osapi_endpoint["host"], :port => nova_osapi_endpoint["port"] })
     end
   end
 
