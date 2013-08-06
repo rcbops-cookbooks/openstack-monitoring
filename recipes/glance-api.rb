@@ -27,6 +27,7 @@ if node.recipe?("glance::api")
       pname = platform_options["glance_api_process_name"]
       process_name pname
       script_name sname
+      http_check({ :host => glance_api_endpoint["host"], :port => glance_api_endpoint["port"] })
     end
   end
 
