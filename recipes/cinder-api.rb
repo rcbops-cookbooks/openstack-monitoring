@@ -24,6 +24,7 @@ if node.recipe?("cinder::cinder-api")
       service_name=platform_options["cinder_api_service"]
       process_name "cinder-api"
       script_name service_name
+      http_check({ :host => volume_endpoint["host"], :port => volume_endpoint["port"] })
     end
   end
 
