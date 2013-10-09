@@ -34,40 +34,40 @@ if node['nova']['network']['provider'] == 'nova'
       alarms(:failure_min => 2.0)
     end
   end
-elsif node['nova']['network']['provider'] == 'quantum'
+elsif node['nova']['network']['provider'] == 'neutron'
 
-  platform_options = node["quantum"]["platform"]
+  platform_options = node["neutron"]["platform"]
 
-  quantum_services = {
-    'quantum_api_service' => {
-      'recipe' => 'nova-network::quantum-server'
+  neutron_services = {
+    'neutron_api_service' => {
+      'recipe' => 'nova-network::neutron-server'
     },
-    'quantum-dhcp-agent' => {
-      'recipe' => 'nova-network::quantum-dhcp-agent'
+    'neutron-dhcp-agent' => {
+      'recipe' => 'nova-network::neutron-dhcp-agent'
     },
-    'quantum-l3-agent' => {
-      'recipe' => 'nova-network::quantum-l3-agent'
+    'neutron-l3-agent' => {
+      'recipe' => 'nova-network::neutron-l3-agent'
     },
-    'quantum-metadata-agent' => {
-      'recipe' => 'nova-network::quantum-metadata-agent'
+    'neutron-metadata-agent' => {
+      'recipe' => 'nova-network::neutron-metadata-agent'
     },
-    'quantum_ovs_service_name' => {
-      'recipe' => 'nova-network::quantum-ovs-plugin',
-      'process' => 'quantum-openvswitch-agent'
+    'neutron_ovs_service_name' => {
+      'recipe' => 'nova-network::neutron-ovs-plugin',
+      'process' => 'neutron-openvswitch-agent'
     },
-    "#{platform_options['quantum_openvswitch_service_name']}_ovsdb_server" => {
-      'recipe' => 'nova-network::quantum-ovs-plugin',
+    "#{platform_options['neutron_openvswitch_service_name']}_ovsdb_server" => {
+      'recipe' => 'nova-network::neutron-ovs-plugin',
       'process' => 'ovsdb-server',
-      'service' => 'quantum_openvswitch_service_name'
+      'service' => 'neutron_openvswitch_service_name'
     },
-    "#{platform_options['quantum_openvswitch_service_name']}_ovs_vswitchd" => {
-      'recipe' => 'nova-network::quantum-ovs-plugin',
+    "#{platform_options['neutron_openvswitch_service_name']}_ovs_vswitchd" => {
+      'recipe' => 'nova-network::neutron-ovs-plugin',
       'process' => 'ovs-vswitchd',
-      'service' => 'quantum_openvswitch_service_name'
+      'service' => 'neutron_openvswitch_service_name'
     }
   }
 
-  quantum_services.each_pair do |svc, values|
+  neutron_services.each_pair do |svc, values|
     if run_context.loaded_recipe?(values['recipe']) || node.recipe?(values['recipe'])
       monitoring_procmon platform_options[svc] || svc do
         service_name = platform_options[values['service']] || platform_options[svc]
