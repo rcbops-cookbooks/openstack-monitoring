@@ -125,6 +125,34 @@ def cephtool_read(data=None):
     osd_json = cephtool_get_json(["osd", "dump"])
     pg_json = cephtool_get_json(["pg", "dump"])
     mon_json = cephtool_get_json(["mon", "dump"])
+    health_json = cephtool_get_json(["-s"])
+
+    read_bytes_sec = 0
+    if 'read_bytes_sec' in health_json["pgmap"]:
+        read_bytes_sec = health_json["pgmap"]["read_bytes_sec"]
+    collectd.Values(plugin="ceph.health",\
+        type='gauge',\
+        type_instance='read_bytes_sec',\
+        values=[read_bytes_sec]\
+    ).dispatch()
+
+    write_bytes_sec = 0
+    if 'write_bytes_sec' in health_json["pgmap"]:
+        write_bytes_sec = health_json["pgmap"]["write_bytes_sec"]
+    collectd.Values(plugin="ceph.health",\
+        type='gauge',\
+        type_instance='write_bytes_sec',\
+        values=[write_bytes_sec]\
+    ).dispatch()
+
+    op_per_sec = 0
+    if 'op_per_sec' in health_json["pgmap"]:
+        op_per_sec = health_json["pgmap"]["op_per_sec"]
+    collectd.Values(plugin="ceph.health",\
+        type='gauge',\
+        type_instance='op_per_sec',\
+        values=[op_per_sec]\
+    ).dispatch()
 
     collectd.Values(plugin="ceph.osd",\
         type='gauge',\
