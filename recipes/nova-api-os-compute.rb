@@ -16,20 +16,26 @@
 # limitations under the License.
 include_recipe "monitoring"
 
+myname = "nova-api-os-compute"
+
 if node.recipe?("nova::api-os-compute")
   platform_options = node["nova"]["platform"]
   nova_osapi_endpoint = get_bind_endpoint("nova", "api")
+
+  # don't monitor the process if running under ssl
+  # (indicates currently that apache is running the process)
   unless nova_osapi_endpoint["scheme"] == "https"
-    monitoring_procmon "nova-api-os-compute" do
-      service_name=platform_options["api_os_compute_service"]
-      pname=platform_options["api_os_compute_process_name"]
-      process_name pname
-      script_name service_name
-      http_check({ :host => nova_osapi_endpoint["host"], :port => nova_osapi_endpoint["port"] })
+    monitoring_procmon myname do
+      process_name platform_options["api_os_compute_procmatch"]
+      script_name platform_options["api_os_compute_service"]
+      http_check ({
+        :host => nova_osapi_endpoint["host"],
+        :port => nova_osapi_endpoint["port"]
+      })
     end
   end
 
-  monitoring_metric "nova-api-os-compute-proc" do
+  monitoring_metric "#{myname}-proc" do
     type "proc"
     proc_name "nova-api-os-compute"
     proc_regex platform_options["api_os_compute_service"]

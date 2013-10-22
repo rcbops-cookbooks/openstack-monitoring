@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 if node.recipe?("nova::vncproxy")
   platform_options = node["nova"]["platform"]
+
   monitoring_procmon platform_options["nova_vncproxy_service"] do
-    service_name=platform_options["nova_vncproxy_service"]
-    process_name "nova-novncproxy"
-    script_name service_name
+    process_name platform_options["nova_vncproxy_procmatch"]
+    script_name platform_options["nova_vncproxy_service"]
   end
 
   monitoring_metric "nova-novncproxy-proc" do
@@ -32,10 +32,8 @@ if node.recipe?("nova::vncproxy")
   end
 
   monitoring_procmon "nova-consoleauth" do
-    service_name=platform_options["nova_vncproxy_consoleauth_service"]
-    pname=platform_options["nova_vncproxy_consoleauth_process_name"]
-    process_name pname
-    script_name service_name
+    process_name platform_options["nova_vncproxy_consoleauth_procmatch"]
+    script_name platform_options["nova_vncproxy_consoleauth_service"]
   end
 
   monitoring_metric "nova-consoleauth-proc" do
