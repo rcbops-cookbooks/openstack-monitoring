@@ -17,10 +17,10 @@
 include_recipe "monitoring"
 
 if node.recipe?("nova::nova-cert")
-  platform_options=node["nova"]["platform"]
+  platform_options = node["nova"]["platform"]
+
   monitoring_procmon "nova-cert" do
-    service_name = platform_options["nova_cert_service"]
-    process_name "nova-cert"
-    script_name service_name
+    process_name platform_options["nova_cert_procmatch"]
+    script_name platform_options["nova_cert_service"]
   end
 end

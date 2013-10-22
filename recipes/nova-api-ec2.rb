@@ -16,22 +16,42 @@
 # limitations under the License.
 include_recipe "monitoring"
 
+myname = "nova-api-ec2"
+
 if node.recipe?("nova::api-ec2")
   platform_options = node["nova"]["platform"]
   nova_ec2_endpoint = get_bind_endpoint("nova", "ec2-public")
-  unless nova_ec2_endpoint["scheme"] == "https"
-    monitoring_procmon "nova-api-ec2" do
-      service_name = platform_options["api_ec2_service"]
-      pname = platform_options["api_ec2_process_name"]
-      process_name pname
-      script_name service_name
-    end
-  end
 
-  monitoring_metric "nova-api-ec2-proc" do
-    type "proc"
-    proc_name "nova-api-ec2"
-    proc_regex platform_options["api_ec2_service"]
-    alarms(:failure_min => 2.0)
+  # don't monitor the process if running under ssl
+  # (indicates currently that apache is running the process)
+  unless nova_ec2_endpoint["scheme"] == "https"
+
+    # on redhat, os-compute, ec2, and metadata apis all run under a single
+    # nova-api process.  if we've already added a configuration to monitor
+    # that single process, don't add another one from this recipe.
+    # TODO(brett): health-check all the tcp ports (8773..8775 iirc)
+    if platform_family?('rhel')
+      if node.recipe?('openstack-monitoring::nova-api-os-compute')
+        # monitoring_procman and monit_procman LWRPs do not have a
+        # 'remove' action; delete the file if it exists. 
+        file "/etc/monit.d/#{myname}.conf" do
+          action :delete
+        end
+        return  # get out of here
+      end
+    end
+
+    monitoring_procmon myname do
+      process_name platform_options["api_ec2_procmatch"]
+      script_name platform_options["api_ec2_service"]
+    end
+
+    monitoring_metric "#{myname}-proc" do
+      type "proc"
+      proc_name "nova-api-ec2"
+      proc_regex platform_options["api_ec2_service"]
+      alarms(:failure_min => 2.0)
+    end
+
   end
 end
