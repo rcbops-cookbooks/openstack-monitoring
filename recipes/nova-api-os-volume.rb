@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 if node.recipe?("nova::api-os-volume")
   platform_options = node["nova"]["platform"]
+
   monitoring_procmon "nova-api-os-volume" do
-    service_name=platform_options["api_os_volume_service"]
-    process_name "nova-api-os-volume"
-    script_name service_name
+    process_name platform_options["api_os_volume_procmatch"]
+    script_name platform_options["api_os_volume_service"]
   end
 
   monitoring_metric "nova-api-os-volume-proc" do
