@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 if node.recipe?("cinder::cinder-volume")
   platform_options = node["cinder"]["platform"]
+
   monitoring_procmon "cinder-volume" do
-    service_name=platform_options["cinder_volume_service"]
-    process_name "cinder-volume"
-    script_name service_name
+    process_name platform_options["cinder_volume_procmatch"]
+    script_name platform_options["cinder_volume_service"]
   end
 
   monitoring_metric "cinder-volume-proc" do

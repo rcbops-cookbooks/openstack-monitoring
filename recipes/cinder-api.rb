@@ -19,12 +19,17 @@ include_recipe "monitoring"
 if node.recipe?("cinder::cinder-api")
   platform_options = node["cinder"]["platform"]
   volume_endpoint = get_bind_endpoint("cinder", "api")
+
+  # don't monitor the process if it's using ssl
+  # (which currently indicates that apache is running the process)
   unless volume_endpoint["scheme"] == "https"
     monitoring_procmon "cinder-api" do
-      service_name=platform_options["cinder_api_service"]
-      process_name "cinder-api"
-      script_name service_name
-      http_check({ :host => volume_endpoint["host"], :port => volume_endpoint["port"] })
+      process_name platform_options["cinder_api_procmatch"]
+      script_name platform_options["cinder_api_service"]
+      http_check({
+        :host => volume_endpoint["host"],
+        :port => volume_endpoint["port"]
+      })
     end
   end
 
