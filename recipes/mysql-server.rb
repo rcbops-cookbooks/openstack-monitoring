@@ -20,28 +20,27 @@ include_recipe "osops-utils"
 # monitoring setup..
 if node.recipe?("mysql-openstack::server")
   platform_options = node["mysql"]["platform"]
-  mysql_info = get_bind_endpoint("mysql", "db")
+
   monitoring_procmon "mysqld" do
-    service_name = platform_options["mysql_service"]
-    process_name service_name
-    script_name service_name
+    process_name platform_options["mysql_procmatch"]
+    script_name platform_options["mysql_service"]
   end
 
   # This is going to fail for an external database server...
   monitoring_metric "mysqld-proc" do
     type "proc"
     proc_name "mysqld"
-    proc_regex platform_options["mysql_service"]
+    proc_regex platform_options["mysql_procmatch"]
     alarms(:failure_min => 1.0)
   end
 
+  mysql_info = get_bind_endpoint("mysql", "db")
   monitoring_metric "mysql" do
     type "mysql"
     host mysql_info["host"]
     user "root"
     password node["mysql"]["server_root_password"]
     port mysql_info["port"]
-
     alarms(
       "max_connections" => {
         :warning_max => node["mysql"]["tunable"]["max_connections"].to_i * 0.8,
