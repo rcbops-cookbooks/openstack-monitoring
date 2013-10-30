@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 if node.recipe?("cinder::cinder-scheduler")
   platform_options = node["cinder"]["platform"]
+
   monitoring_procmon "cinder-scheduler" do
-    service_name=platform_options["cinder_scheduler_service"]
-    process_name "cinder-scheduler"
-    script_name service_name
+    process_name platform_options["cinder_scheduler_procmatch"]
+    script_name platform_options["cinder_scheduler_service"]
   end
 
   monitoring_metric "cinder-scheduler-proc" do

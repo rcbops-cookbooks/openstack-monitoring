@@ -21,13 +21,16 @@ if node.recipe?("glance::api")
   platform_options = node["glance"]["platform"]
   ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
   glance_api_endpoint = get_bind_endpoint("glance", "api")
+  glance_settings = get_settings_by_role("glance-setup", "glance")
+
   unless glance_api_endpoint["scheme"] == "https"
     monitoring_procmon "glance-api" do
-      sname = platform_options["glance_api_service"]
-      pname = platform_options["glance_api_process_name"]
-      process_name pname
-      script_name sname
-      http_check({ :host => glance_api_endpoint["host"], :port => glance_api_endpoint["port"] })
+      process_name platform_options["glance_api_procmatch"]
+      script_name platform_options["glance_api_service"]
+      http_check({
+        :host => glance_api_endpoint["host"],
+        :port => glance_api_endpoint["port"]
+      })
     end
   end
 
@@ -43,9 +46,9 @@ if node.recipe?("glance::api")
     type "pyscript"
     script "glance_plugin.py"
     options(
-      "Username" => node["glance"]["service_user"],
-      "Password" => node["glance"]["service_pass"],
-      "TenantName" => node["glance"]["service_tenant_name"],
+      "Username" => glance_settings["service_user"],
+      "Password" => glance_settings["service_pass"],
+      "TenantName" => glance_settings["service_tenant_name"],
       "AuthURL" => ks_service_endpoint["uri"]
     )
   end

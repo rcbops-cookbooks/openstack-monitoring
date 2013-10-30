@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: nova-scheduler
+# Recipe:: neutron-metadata-agent
 #
 # Copyright 2013, Rackspace US, Inc.
 #
@@ -16,18 +16,12 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-if node.recipe?("nova::scheduler")
-  platform_options = node["nova"]["platform"]
-
-  monitoring_procmon "nova-scheduler" do
-    process_name platform_options["nova_scheduler_procmatch"]
-    script_name platform_options["nova_scheduler_service"]
-  end
-
-  monitoring_metric "nova-scheduler-proc" do
-    type "proc"
-    proc_name "nova-scheduler"
-    proc_regex platform_options["nova_scheduler_service"]
-    alarms(:failure_min => 2.0)
-  end
+# nova-network monitoring setup..
+if node.recipe?("nova-network::quantum-metadata-agent")
+	platform_options = node["nova-network"]["platform"]
+	monitoring_procmon "quantum-metadata-agent" do
+            service_name=platform_options["quantum-metadata-agent"]
+            process_name "quantum-metadata-agent"
+            script_name service_name
+	end
 end
