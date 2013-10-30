@@ -20,7 +20,7 @@ if node.recipe?("swift::proxy-server")
   platform_options = node["swift"]["platform"]
   swift_proxy_service = platform_options["service_prefix"] + "swift-proxy" + platform_options["service_suffix"]
   monitoring_procmon "swift-proxy" do
-    process_name "python.*swift-proxy.*"
+    process_name '^((/usr/bin/)?python\d? )?(/usr/bin/)?swift-proxy\b'
     script_name swift_proxy_service
     only_if "[ -e /etc/swift/proxy-server.conf ] && [ -e /etc/swift/object.ring.gz ]"
   end
@@ -28,7 +28,7 @@ if node.recipe?("swift::proxy-server")
   monitoring_metric "swift-proxy-proc" do
     type "proc"
     proc_name "swift-proxy"
-    proc_regex "python.*swift-proxy.*"
+    proc_regex '^((/usr/bin/)?python\d? )?(/usr/bin/)?swift-proxy\b'
     alarms(:failure_min => 1.0)
   end
 end

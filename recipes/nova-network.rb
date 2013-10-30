@@ -16,15 +16,13 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-
 # nova-network monitoring setup..
 if node['nova']['network']['provider'] == 'nova'
   platform_options = node["nova-network"]["platform"]
   if node.recipe?("nova-network::nova-controller") || node.recipe?("nova-network::nova-compute")
     monitoring_procmon "nova-network" do
-      service_name=platform_options["nova_network_service"]
-      process_name "nova-network"
-      script_name service_name
+      process_name platform_options["nova_network_procmatch"]
+      script_name platform_options["nova_network_service"]
     end
 
     monitoring_metric "nova-network-proc" do
@@ -37,32 +35,38 @@ if node['nova']['network']['provider'] == 'nova'
 elsif node['nova']['network']['provider'] == 'neutron'
 
   platform_options = node["neutron"]["platform"]
+  procmatch_base = '^((/usr/bin/)?python\d? )?(/usr/bin/)?'
 
+  # TODO(brett): this needs to be unwound/abstracted out of here a bit more
   neutron_services = {
     'neutron_api_service' => {
-      'recipe' => 'nova-network::neutron-server'
+      'recipe' => 'nova-network::neutron-server',
+      'process' => procmatch_base + 'neutron-server\b'
     },
     'neutron-dhcp-agent' => {
-      'recipe' => 'nova-network::neutron-dhcp-agent'
+      'recipe' => 'nova-network::neutron-dhcp-agent',
+      'process' => procmatch_base + 'neutron-dhcp-agent\b'
     },
     'neutron-l3-agent' => {
-      'recipe' => 'nova-network::neutron-l3-agent'
+      'recipe' => 'nova-network::neutron-l3-agent',
+      'process' => procmatch_base + 'neutron-l3-agent\b'
     },
     'neutron-metadata-agent' => {
-      'recipe' => 'nova-network::neutron-metadata-agent'
+      'recipe' => 'nova-network::neutron-metadata-agent',
+      'process' => procmatch_base + 'neutron-metadata-agent\b'
     },
     'neutron_ovs_service_name' => {
       'recipe' => 'nova-network::neutron-ovs-plugin',
-      'process' => 'neutron-openvswitch-agent'
+      'process' => procmatch_base + 'neutron-openvswitch-agent\b'
     },
     "#{platform_options['neutron_openvswitch_service_name']}_ovsdb_server" => {
       'recipe' => 'nova-network::neutron-ovs-plugin',
-      'process' => 'ovsdb-server',
+      'process' => '^ovsdb-server\s',
       'service' => 'neutron_openvswitch_service_name'
     },
     "#{platform_options['neutron_openvswitch_service_name']}_ovs_vswitchd" => {
       'recipe' => 'nova-network::neutron-ovs-plugin',
-      'process' => 'ovs-vswitchd',
+      'process' => '^ovs-vswitchd\s',
       'service' => 'neutron_openvswitch_service_name'
     }
   }

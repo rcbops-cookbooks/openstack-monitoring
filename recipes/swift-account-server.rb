@@ -21,7 +21,7 @@ if node.recipe?("swift::account-server")
     platform_options = node["swift"]["platform"]
     service_name = platform_options["service_prefix"] + svc + platform_options["service_suffix"]
     monitoring_procmon svc do
-      process_name "python.*#{svc}"
+      process_name '^((/usr/bin/)?python\d? )?(/usr/bin/)?'+svc+'\b'
       script_name service_name
       only_if "[ -e /etc/swift/account-server.conf ] && [ -e /etc/swift/account.ring.gz ]"
     end
@@ -29,7 +29,7 @@ if node.recipe?("swift::account-server")
     monitoring_metric "#{svc}-proc" do
       type "proc"
       proc_name svc
-      proc_regex "python.*#{svc}"
+      proc_regex '^((/usr/bin/)?python\d? )?(/usr/bin/)?'+svc+'\b'
       alarms(:failure_min => 1.0)
     end
   end
