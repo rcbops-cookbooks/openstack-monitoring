@@ -20,9 +20,7 @@ include_recipe "monitoring"
 if node.recipe?("rabbitmq-openstack::server")
   platform_options = node["rabbitmq"]["platform"]
   monitoring_procmon "rabbitmq-server" do
-    pid_file "/var/run/rabbitmq/pid"
-    service_name=platform_options["rabbitmq_service"]
-    script_name service_name
+    action :remove
   end
 
   monitoring_metric "rabbitmq-server-proc" do
