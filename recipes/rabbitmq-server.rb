@@ -21,6 +21,7 @@ if node.recipe?("rabbitmq-openstack::server")
   platform_options = node["rabbitmq"]["platform"]
   monitoring_procmon "rabbitmq-server" do
     action :remove
+    notifies :reload, "service[monit]", :immediately
   end
 
   monitoring_metric "rabbitmq-server-proc" do
