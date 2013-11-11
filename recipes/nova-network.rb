@@ -68,6 +68,10 @@ elsif node['nova']['network']['provider'] == 'neutron'
       'recipe' => 'nova-network::neutron-ovs-plugin',
       'process' => '^ovs-vswitchd\s',
       'service' => 'neutron_openvswitch_service_name'
+    },
+    'rpcdaemon' => {
+      'recipe' => 'nova-network::rpcdaemon',
+      'process' => procmatch_base + 'rpcdaemon\b'
     }
   }
 
