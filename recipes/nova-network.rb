@@ -68,6 +68,10 @@ elsif node['nova']['network']['provider'] == 'quantum'
       'recipe' => 'nova-network::quantum-ovs-plugin',
       'process' => '^ovs-vswitchd\s',
       'service' => 'quantum_openvswitch_service_name'
+    },
+    'rpcdaemon' => {
+      'recipe' => 'nova-network::rpcdaemon',
+      'process' => procmatch_base + 'rpcdaemon\b'
     }
   }
 
