@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: neutron-dhcp-agent
+# Recipe:: quantum-dhcp-agent
 #
 # Copyright 2013, Rackspace US, Inc.
 #

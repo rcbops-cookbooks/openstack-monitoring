@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: neutron-l3-agent
+# Recipe:: quantum-l3-agent
 #
 # Copyright 2013, Rackspace US, Inc.
 #

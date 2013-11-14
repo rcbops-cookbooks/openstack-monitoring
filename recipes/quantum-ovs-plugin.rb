@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: neutron-ovs-plugin
+# Recipe:: quantum-ovs-plugin
 #
 # Copyright 2013, Rackspace US, Inc.
 #

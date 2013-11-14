@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: neutron-metadata-agent
+# Recipe:: quantum-metadata-agent
 #
 # Copyright 2013, Rackspace US, Inc.
 #
