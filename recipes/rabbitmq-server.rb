@@ -16,13 +16,12 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-# monitoring setup..
 if node.recipe?("rabbitmq-openstack::server")
   platform_options = node["rabbitmq"]["platform"]
+
   monitoring_procmon "rabbitmq-server" do
-    pid_file "/var/run/rabbitmq/pid"
-    service_name=platform_options["rabbitmq_service"]
-    script_name service_name
+    process_name platform_options["rabbitmq_service_regex"]
+    script_name platform_options["rabbitmq_service"]
   end
 
   monitoring_metric "rabbitmq-server-proc" do
