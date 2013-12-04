@@ -22,6 +22,8 @@ if node.recipe?("rabbitmq-openstack::server")
   monitoring_procmon "rabbitmq-server" do
     process_name platform_options["rabbitmq_service_regex"]
     script_name platform_options["rabbitmq_service"]
+    start_cmd "/bin/true"
+    stop_cmd "/bin/true"
   end
 
   monitoring_metric "rabbitmq-server-proc" do
