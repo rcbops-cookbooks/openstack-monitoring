@@ -22,7 +22,7 @@ if node.recipe?("ceilometer::ceilometer-central-agent")
 
   monitoring_metric "#{service_name}-proc" do
     type "proc"
-    proc_name "#{service_name}"
+    proc_name service_name
     proc_regex "#{service_name}\b"
     alarms(:failure_min => 2.0)
   end
