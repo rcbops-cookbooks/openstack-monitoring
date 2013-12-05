@@ -24,7 +24,7 @@ if node.recipe?("ceilometer::ceilometer-api")
   # don't monitor the process if it's using ssl
   # (which currently indicates that apache is running the process)
   unless endpoint["scheme"] == "https"
-    monitoring_procmon "#{service_name}" do
+    monitoring_procmon service_name do
       process_name "#{service_name}\b"
       script_name service_name
       http_check({
@@ -36,7 +36,7 @@ if node.recipe?("ceilometer::ceilometer-api")
 
   monitoring_metric "#{service_name}-proc" do
     type "proc"
-    proc_name "#{service_name}"
+    proc_name service_name
     proc_regex "#{service_name}\b"
     alarms(:failure_min => 2.0)
   end
