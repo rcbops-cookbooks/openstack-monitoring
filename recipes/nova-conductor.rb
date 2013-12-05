@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 if node.recipe?("nova::nova-conductor")
   platform_options=node["nova"]["platform"]
+
   monitoring_procmon "nova-conductor" do
-    service_name=platform_options["nova_conductor_service"]
-    process_name "nova-conductor"
-    script_name service_name
+    process_name platform_options["nova_conductor_procmatch"]
+    script_name platform_options["nova_conductor_service"]
   end
 
   monitoring_metric "nova-conductor-proc" do

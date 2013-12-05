@@ -24,12 +24,12 @@ if node.recipe?("keystone::keystone-api")
   ks_real_service_endpoint = get_bind_endpoint("keystone", "service-api")
   ks_real_admin_endpoint = get_bind_endpoint("keystone", "admin-api")
 
+  # don't monitor the process if it's using ssl
+  # (which currently indicates that apache is running the process)
   unless ks_service_endpoint["scheme"] == "https"
     monitoring_procmon "keystone" do
-      procname=platform_options["keystone_service"]
-      sname=platform_options["keystone_process_name"]
-      process_name sname
-      script_name procname
+      process_name platform_options["keystone_procmatch"]
+      script_name platform_options["keystone_service"]
       http_check([
         {
           :host => ks_real_service_endpoint['host'],

@@ -16,18 +16,37 @@
 # limitations under the License.
 include_recipe "monitoring"
 
+myname = "nova-api-metadata"
+
 if node.recipe?("nova::api-metadata")
   platform_options = node["nova"]["platform"]
-  monitoring_procmon "nova-api-metadata" do
-    service_name = platform_options["nova_api_metadata_service"]
-    process_name "nova-api-metadata"
-    script_name service_name
+
+  # on redhat, os-compute, ec2, and metadata apis all run under a single
+  # nova-api process.  if we've already added a configuration to monitor that
+  # single process, don't add another one from this recipe.
+  # TODO(brett): health-check all the tcp ports (8773..8775 iirc)
+  if platform_family?('rhel')
+    if node.recipe?('openstack-monitoring::nova-api-os-compute')
+      # monitoring_procman and monit_procman LWRPs do not have a
+      # 'remove' action; delete the file if it exists. 
+      file "/etc/monit.d/#{myname}.conf" do
+        action :delete
+      end
+      return  # get out of here
+    end
+  end
+
+  monitoring_procmon myname do
+    process_name platform_options["api_metadata_procmatch"]
+    script_name platform_options["api_metadata_service"]
   end
 
   monitoring_metric "nova-api-metadata-proc" do
     type "proc"
     proc_name "nova-api-metadata"
-    proc_regex platform_options["nova_api_metadata_service"]
+    proc_regex platform_options["api_metadata_service"]
     alarms(:failure_min => 2.0)
   end
+
+
 end
