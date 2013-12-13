@@ -103,4 +103,10 @@ elsif node['nova']['network']['provider'] == 'neutron'
       end
     end
   end
+
+  %w(dhcp-agent l3-agent metadata-agent server).each do |name|
+    monitoring_procmon "quantum-#{name}" do
+      action :remove
+    end
+  end
 end
