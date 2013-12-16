@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 # nova-network monitoring setup..
 if node.recipe?("nova-network::quantum-ovs-plugin")
-	platform_options = node["nova-network"]["platform"]
-	monitoring_procmon "quantum-ovs-plugin" do
-            service_name=platform_options["quantum_ovs_service_name"]
-            process_name "quantum-plugin-openvswitch-agent"
-            script_name service_name
-	end
+  platform_options = node["nova-network"]["platform"]
+  monitoring_procmon "quantum-ovs-plugin" do
+    service_name=platform_options["quantum_ovs_service_name"]
+    process_name "quantum-plugin-openvswitch-agent"
+    script_name service_name
+  end
 end

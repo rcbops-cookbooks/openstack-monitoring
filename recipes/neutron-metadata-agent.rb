@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 # nova-network monitoring setup..
 if node.recipe?("nova-network::quantum-metadata-agent")
-	platform_options = node["nova-network"]["platform"]
-	monitoring_procmon "quantum-metadata-agent" do
-            service_name=platform_options["quantum-metadata-agent"]
-            process_name "quantum-metadata-agent"
-            script_name service_name
-	end
+  platform_options = node["nova-network"]["platform"]
+  monitoring_procmon "quantum-metadata-agent" do
+    service_name=platform_options["quantum-metadata-agent"]
+    process_name "quantum-metadata-agent"
+    script_name service_name
+  end
 end
