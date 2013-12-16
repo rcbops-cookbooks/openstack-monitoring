@@ -18,10 +18,10 @@ include_recipe "monitoring"
 
 # nova-network monitoring setup..
 if node.recipe?("nova-network::quantum-l3-agent")
-	platform_options = node["nova-network"]["platform"]
-	monitoring_procmon "quantum-l3-agent" do
-            service_name=platform_options["quantum-l3-agent"]
-            process_name "quantum-l3-agent"
-            script_name service_name
-	end
+  platform_options = node["nova-network"]["platform"]
+  monitoring_procmon "quantum-l3-agent" do
+    service_name=platform_options["quantum-l3-agent"]
+    process_name "quantum-l3-agent"
+    script_name service_name
+  end
 end
