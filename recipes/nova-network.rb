@@ -75,6 +75,13 @@ elsif node['nova']['network']['provider'] == 'neutron'
     }
   }
 
+  # remove old quantums first
+  %w(dhcp-agent l3-agent metadata-agent server).each do |name|
+    monitoring_procmon "quantum-#{name}" do
+      action :remove
+    end
+  end
+
   neutron_services.each_pair do |svc, values|
     if run_context.loaded_recipe?(values['recipe']) || node.recipe?(values['recipe'])
       monitoring_procmon platform_options[svc] || svc do
@@ -90,12 +97,6 @@ elsif node['nova']['network']['provider'] == 'neutron'
         proc_regex values['process'] || platform_options[svc]
         alarms(:failure_min => 2.0)
       end
-    end
-  end
-
-  %w(dhcp-agent l3-agent metadata-agent server).each do |name|
-    monitoring_procmon "quantum-#{name}" do
-      action :remove
     end
   end
 end
