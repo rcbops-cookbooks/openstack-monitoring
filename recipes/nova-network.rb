@@ -55,6 +55,10 @@ elsif node['nova']['network']['provider'] == 'neutron'
       'recipe' => 'nova-network::neutron-metadata-agent',
       'process' => procmatch_base + 'neutron-metadata-agent\b'
     },
+    'neutron-lbaas-agent' => {
+      'recipe' => 'nova-network::neutron-lbaas-agent',
+      'process' => procmatch_base + 'neutron-lbaas-agent\b'
+    },
     'neutron_ovs_service_name' => {
       'recipe' => 'nova-network::neutron-ovs-plugin',
       'process' => procmatch_base + 'neutron-openvswitch-agent\b'
