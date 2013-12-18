@@ -21,8 +21,8 @@ if node.recipe?("ceilometer::ceilometer-compute")
   service_name = platform_options["compute_service"]
 
   monit_procmon "#{service_name}-monit" do
-    process_name service_name
-    script_name "#{service_name}\b"
+    process_name "#{service_name}\b"
+    script_name service_name
   end
 
   monitoring_metric "#{service_name}-proc" do
