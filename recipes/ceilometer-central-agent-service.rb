@@ -1,5 +1,5 @@
 # Cookbook Name:: openstack-monitoring
-# Recipe:: neutron-ovs-plugin
+# Recipe:: ceilometer-central-agent-service
 #
 # Copyright 2013, Rackspace US, Inc.
 #
@@ -16,12 +16,20 @@
 # limitations under the License.
 include_recipe "monitoring"
 
-# nova-network monitoring setup..
-if node.recipe?("nova-network::quantum-ovs-plugin")
-  platform_options = node["nova-network"]["platform"]
-  monitoring_procmon "quantum-ovs-plugin" do
-    service_name=platform_options["quantum_ovs_service_name"]
-    process_name "quantum-plugin-openvswitch-agent"
+if node.recipe?("ceilometer::ceilometer-central-agent")
+  platform_options = node["ceilometer"]["platform"]
+  service_name = platform_options["central_agent_service"]
+  proc_name = platform_options["central_agent_procmatch"]
+
+  monit_procmon "ceilometer-central-agent" do
+    process_name proc_name
     script_name service_name
+  end
+
+  monitoring_metric "ceilometer-central-agent-proc" do
+    type "proc"
+    proc_name service_name
+    proc_regex service_name
+    alarms(:failure_min => 2.0)
   end
 end
