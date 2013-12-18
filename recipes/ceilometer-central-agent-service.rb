@@ -21,8 +21,8 @@ if node.recipe?("ceilometer::ceilometer-central-agent")
   service_name = platform_options["central_agent_service"]
 
   monit_procmon "#{service_name}-monit" do
-    process_name service_name
-    script_name "#{service_name}\b"
+    process_name "#{service_name}\b"
+    script_name service_name
   end
 
   monitoring_metric "#{service_name}-proc" do
