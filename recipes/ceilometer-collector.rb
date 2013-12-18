@@ -19,9 +19,10 @@ include_recipe "monitoring"
 if node.recipe?("ceilometer::ceilometer-collector")
   platform_options = node["ceilometer"]["platform"]
   service_name = platform_options["collector_service"]
+  proc_name = platform_options["collector_procmatch"]
 
   monit_procmon "#{service_name}-monit" do
-    process_name "#{service_name}\b"
+    process_name proc_name
     script_name service_name
   end
 
