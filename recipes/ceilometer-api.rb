@@ -28,10 +28,6 @@ if node.recipe?("ceilometer::ceilometer-api")
     monitoring_procmon service_name do
       process_name proc_name
       script_name service_name
-      http_check({
-        :host => endpoint["host"],
-        :port => endpoint["port"]
-      })
     end
   end
 
