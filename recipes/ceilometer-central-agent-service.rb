@@ -19,11 +19,17 @@ include_recipe "monitoring"
 if node.recipe?("ceilometer::ceilometer-central-agent")
   platform_options = node["ceilometer"]["platform"]
   service_name = platform_options["central_agent_service"]
+  proc_name = platform_options["central_agent_procmatch"]
+
+  monit_procmon "#{service_name}-monit" do
+    process_name proc_name
+    script_name service_name
+  end
 
   monitoring_metric "#{service_name}-proc" do
     type "proc"
     proc_name service_name
-    proc_regex "#{service_name}\b"
+    proc_regex service_name
     alarms(:failure_min => 2.0)
   end
 end
