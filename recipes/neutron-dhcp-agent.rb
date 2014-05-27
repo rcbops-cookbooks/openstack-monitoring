@@ -17,11 +17,11 @@
 include_recipe "monitoring"
 
 # nova-network monitoring setup..
-if node.recipe?("nova-network::quantum-dhcp-agent")
+if node.recipe?("nova-network::neutron-dhcp-agent")
   platform_options = node["nova-network"]["platform"]
-  monitoring_procmon "quantum-dhcp-agent" do
-    service_name=platform_options["quantum-dhcp-agent"]
-    process_name "quantum-dhcp-agent"
+  monitoring_procmon "neutron-dhcp-agent" do
+    service_name=platform_options["neutron-dhcp-agent"]
+    process_name "neutron-dhcp-agent"
     script_name service_name
  end
 end
