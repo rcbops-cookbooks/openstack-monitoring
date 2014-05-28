@@ -19,11 +19,13 @@ include_recipe "monitoring"
 if node.recipe?("rabbitmq-openstack::server")
   platform_options = node["rabbitmq"]["platform"]
 
+  # We want to monitor it but noop start/stop actions due to race condition reasons
   monitoring_procmon "rabbitmq-server" do
     process_name platform_options["rabbitmq_service_regex"]
-    script_name platform_options["rabbitmq_service"]
-    start_cmd "/bin/true"
-    stop_cmd "/bin/true"
+    # take no action; only monitor and notify
+    service_bin ""
+    start_cmd ""
+    stop_cmd ""
   end
 
   monitoring_metric "rabbitmq-server-proc" do
