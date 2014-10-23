@@ -104,3 +104,11 @@ elsif node['nova']['network']['provider'] == 'neutron'
     end
   end
 end
+
+if node.recipe?("nova-network::rpcdaemon")
+  monitoring_procmon "rpcwatcher" do
+    pid_file '/var/run/rpcwatcher.pid'
+    service_bin ""
+    script_name '/root/rpcwatcher.sh'
+  end
+end
